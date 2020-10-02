@@ -218,8 +218,19 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
                                 bot.send_message(sender_id, full_text)
                                 full_text = ''
                             full_text += f'Amount: {i[0]}, Transaction Hash: {i[1]}\n\n'
-                        bot.edit_message_two(sender_id, message_id, full_text, [[{'text':'Back', 'callback_data':'Back'}]])
+                        bot.send_message_four(sender_id, full_text, [[{'text':'Back', 'callback_data':'Back'}]])
                         bot.get_updates(offset = update_id+1)
+
+                elif callback_data == 'All User':
+                    all_use = database.all_first(cur)
+                    full_text = ''
+                    for i in all_use:
+                        if len(full_text) > 3800:
+                            bot.send_message(sender_id, full_text)
+                            full_text = ''
+                        full_text += f'Telegram ID: {i[0]}, First Name: {i[1]}, Balance: {i[2]}, Referral ID: {i[3]}\n\n'
+                    bot.send_message_four(sender_id, full_text, [[{'text':'Back', 'callback_data':'Back'}]])
+                    bot.get_updates(offset = update_id+1)
 
                 elif callback_data == 'Back':
                     total_user = database.total_user(cur)
@@ -230,7 +241,7 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
                         total_depo = 0.000
                     if sender_id in interest:
                         del interest[sender_id]
-                    bot.edit_message_two(sender_id, message_id, 'Select one of the option from below', [[{'text':f'Total User: {total_user}', 'callback_data':'Nothing'}],
+                    bot.edit_message_two(sender_id, message_id, 'Select one of the option from below', [[{'text':f'Total User: {total_user}', 'callback_data':'All User'}],
                                                                                         [{'text':f'Total Deposit: {total_depo} BTC', 'callback_data':'Total Deposit'}],
                                                                                         [{'text':'Pending Withdrawal', 'callback_data':'Pending Withdrawal'}],
                                                                                         [{'text':'Set Interest of Today','callback_data':'Enter Interest'}]])
@@ -247,9 +258,10 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
                         for i in pending_id:
                             if len(full_text) > 3800:
                                 bot.send_message(sender_id, full_text)
+                                full_text = ''
                             full_text += f'{i[0]},'
                         full_text += '\n\nTo Get Full Details of a Withdrawal, send the following Command\n\n$data (Message ID)\n\nExample$data 5\n$data 38\n\nTo mark a withdrawal as Complete, send the command below\n\n$withdraw (Message ID) (transaction hash)'
-                        bot.edit_message_two(sender_id, message_id, full_text, [[{'text':'Back', 'callback_data':'Back'}]])
+                        bot.send_message_four(sender_id, full_text, [[{'text':'Back', 'callback_data':'Back'}]])
                         bot.get_updates(offset = update_id+1)
 
                 elif callback_data == 'Enter Interest':
@@ -261,6 +273,7 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
                     all_user = database.all_user(cur)
                     if all_user == 'Nothing':
                         bot.edit_message_two(sender_id, message_id, 'No ID available to send interest', [[{'text':'Back', 'callback_data':'Back'}]])
+                        del interest[sender_id]
                         bot.get_updates(offset = update_id+1)  
                     else:
                         for i in all_user:
@@ -320,7 +333,7 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
                     total_depo = format(total_depo, ',.8f')
                 except:
                     total_depo = 0.000
-                bot.send_message_four(sender_id, 'Select one of the option from below', [[{'text':f'Total User: {total_user}', 'callback_data':'Nothing'}],
+                bot.send_message_four(sender_id, 'Select one of the option from below', [[{'text':f'Total User: {total_user}', 'callback_data':'All User'}],
                                                                                         [{'text':f'Total Deposit: {total_depo} BTC', 'callback_data':'Total Deposit'}],
                                                                                         [{'text':'Pending Withdrawal', 'callback_data':'Pending Withdrawal'}],
                                                                                         [{'text':'Set Interest of Today','callback_data':'Enter Interest'}]])
@@ -339,7 +352,7 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
                     total_depo = format(total_depo, ',.8f')
                 except:
                     total_depo = 0.000
-                bot.send_message_four(sender_id, 'Select one of the option from below', [[{'text':f'Total User: {total_user}', 'callback_data':'Nothing'}],
+                bot.send_message_four(sender_id, 'Select one of the option from below', [[{'text':f'Total User: {total_user}', 'callback_data':'All User'}],
                                                                                         [{'text':f'Total Deposit: {total_depo} BTC', 'callback_data':'Total Deposit'}],
                                                                                         [{'text':'Pending Withdrawal', 'callback_data':'Pending Withdrawal'}],
                                                                                         [{'text':'Set Interest of Today','callback_data':'Enter Interest'}]])

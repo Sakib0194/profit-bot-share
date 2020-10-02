@@ -283,6 +283,7 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
 
         else:
             text = current_updates['message']['text']
+            first_name = current_updates['message']['from']['first_name']
             print(text)
 
             if text.startswith('/start'):
@@ -291,7 +292,7 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
                 if sender_id in change_address:
                     change_address.remove(sender_id)
                 if database.find_user(sender_id, cur) == 'Nothing':
-                    database.add_user(sender_id, cur)
+                    database.add_user(sender_id, first_name, cur)
                 if database.find_ref(sender_id, cur) == 0:
                     try:
                         data = text.split(' ')[1]

@@ -1,5 +1,5 @@
-def add_user(tele_id, cur):
-    sql = f"INSERT INTO users(Telegram_ID) VALUES('{tele_id}')"
+def add_user(tele_id, first_name, cur):
+    sql = f"INSERT INTO users(Telegram_ID, First_Name) VALUES('{tele_id}', '{first_name}')"
     cur.execute(sql)
 
 def find_user(user_id, cur):
@@ -139,3 +139,11 @@ def all_user(cur):
 def inte_update(inte, cur):
     sql = f"UPDATE special SET Detail = '{inte}' WHERE Code = 'Profit'"
     cur.execute(sql)
+
+def all_first(cur):
+    cur.execute(f"SELECT Telegram_ID, First_Name, Balance, Referral_ID FROM users")
+    rows = cur.fetchall()
+    if rows == []:
+        return 'Nothing'
+    else:
+        return rows
