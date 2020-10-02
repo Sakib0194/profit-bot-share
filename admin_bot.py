@@ -37,7 +37,7 @@ class BoilerPlate:
         fieldss = {'chat_id': chat_id, 'text': text, 'parse_mode': parse_mode, 'reply_markup': reply_markup}
         function = 'sendMessage'
         send = requests.post(self.api_url + function, fieldss).json()
-        print(send)
+        #print(send)
         return send   
 
     def send_message_four(self, chat_id, text, reply_markup, disable_web_page_preview=True, parse_mode='HTML'):               #FOR SENDING MESSAGES WITH INLINE KEYBOARD
@@ -111,7 +111,7 @@ class BoilerPlate:
         fieldss = {'chat_id': chat_id, 'message_id': message_id, 'text': text, 'parse_mode':parse_mode, 'reply_markup':reply_markup, 'disable_web_page_preview':disable_web_page_preview}
         function = 'editMessageText'
         send = requests.post(self.api_url + function, fieldss)
-        print(send.json())
+        #print(send.json())
         return send
 
     def restrict_everyone(self, chat_id):
@@ -164,7 +164,7 @@ def starter():
                 cur = conn.cursor()
             all_updates = bot.get_updates(offset)
             for current_updates in all_updates:
-                print(current_updates, '\n')
+                #print(current_updates, '\n')
                 update_id = current_updates['update_id']
                 #bot.get_updates(offset = update_id+1)
                 try:
@@ -364,7 +364,6 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
                 try:
                     inte = float(text)
                     interest[sender_id] = inte
-                    print(interest)
                     bot.send_message_four(sender_id, f'Interest Rate {inte}. Interest Positive or Negative?', [[{'text':'Positive', 'callback_data':'Inte Posi'}, {'text':'Negative', 'callback_data':'Inte Nega'}],
                                                                                                 [{'text':'Back', 'callback_data':'Back'}]])
                     bot.get_updates(offset = update_id+1)

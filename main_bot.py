@@ -164,7 +164,7 @@ def starter():
                 cur = conn.cursor()
             all_updates = bot.get_updates(offset)
             for current_updates in all_updates:
-                print(current_updates, '\n')
+                #print(current_updates, '\n')
                 update_id = current_updates['update_id']
                 #bot.get_updates(offset = update_id+1)
                 try:
