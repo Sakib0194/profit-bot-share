@@ -117,7 +117,7 @@ def pending(cur):
         return rows
 
 def find_history_two(id_num, cur):
-    cur.execute(f"SELECT Type, Transaction_ID, Wallet, Amount, Time FROM history WHERE ID_Num = '{id_num}'")
+    cur.execute(f"SELECT Type, Transaction_ID, Wallet, Amount, Time, Telegram_ID FROM history WHERE ID_Num = '{id_num}'")
     rows = cur.fetchall()
     if rows == []:
         return 'Nothing'
@@ -147,3 +147,11 @@ def all_first(cur):
         return 'Nothing'
     else:
         return rows
+
+def first_name(tele_id, cur):
+    cur.execute(f"SELECT First_Name FROM users WHERE Telegram_ID = '{tele_id}'")
+    rows = cur.fetchall()
+    if rows == []:
+        return 'Nothing'
+    else:
+        return rows[0][0]
