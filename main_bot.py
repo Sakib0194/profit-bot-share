@@ -233,7 +233,7 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
                 bot.get_updates(offset = update_id+1)
 
             elif callback_data == 'Referral':
-                ref_link = f'https://t.me/simplifiedcryptobot?start={sender_id}'
+                ref_link = f'https://t.me/profit_share_bot?start={sender_id}'
                 bot.edit_message_two(sender_id, message_id, f'Your referral link:\n{ref_link}', [[{'text':'Back', 'callback_data':'Back'}]])
                 bot.get_updates(offset = update_id+1)
 

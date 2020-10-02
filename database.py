@@ -109,7 +109,7 @@ def all_depo(cur):
         return rows
 
 def pending(cur):
-    cur.execute(f"SELECT ID_Num FROM history WHERE Type = 'Withdraw'")
+    cur.execute(f"SELECT ID_Num FROM history WHERE Type = 'Withdraw' and Transaction_ID = 'Pending'")
     rows = cur.fetchall()
     if rows == []:
         return 'Nothing'
@@ -117,9 +117,25 @@ def pending(cur):
         return rows
 
 def find_history_two(id_num, cur):
-    cur.execute(f"SELECT, Type, Transaction_ID, Wallet, Amount, Time FROM history WHERE ID_Num = '{id_num}'")
+    cur.execute(f"SELECT Type, Transaction_ID, Wallet, Amount, Time FROM history WHERE ID_Num = '{id_num}'")
     rows = cur.fetchall()
     if rows == []:
         return 'Nothing'
     else:
         return rows
+
+def update_trans(id_num, trans, cur):
+    sql = f"UPDATE history SET Transaction_ID = '{trans}' WHERE ID_Num = '{id_num}'"
+    cur.execute(sql)
+
+def all_user(cur):
+    cur.execute(f"SELECT Telegram_ID, Referral_ID, Balance FROM users WHERE Balance > 0")
+    rows = cur.fetchall()
+    if rows == []:
+        return 'Nothing'
+    else:
+        return rows
+
+def inte_update(inte, cur):
+    sql = f"UPDATE special SET Detail = '{inte}' WHERE Code = 'Profit'"
+    cur.execute(sql)
