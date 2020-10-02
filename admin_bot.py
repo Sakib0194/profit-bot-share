@@ -223,8 +223,11 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
 
                 elif callback_data == 'Back':
                     total_user = database.total_user(cur)
-                    total_depo = database.total_depo(cur)
-                    total_depo = format(total_depo, ',.8f')
+                    try:
+                        total_depo = database.total_depo(cur)
+                        total_depo = format(total_depo, ',.8f')
+                    except:
+                        total_depo = 0.000
                     if sender_id in interest:
                         del interest[sender_id]
                     bot.edit_message_two(sender_id, message_id, 'Select one of the option from below', [[{'text':f'Total User: {total_user}', 'callback_data':'Nothing'}],
@@ -257,7 +260,7 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
                 elif callback_data == 'Inte Posi':
                     all_user = database.all_user(cur)
                     if all_user == 'Nothing':
-                        bot.edit_message_two(sender_id, message_id, 'No ID available to sent interest', [[{'text':'Back', 'callback_data':'Back'}]])
+                        bot.edit_message_two(sender_id, message_id, 'No ID available to send interest', [[{'text':'Back', 'callback_data':'Back'}]])
                         bot.get_updates(offset = update_id+1)  
                     else:
                         for i in all_user:
@@ -312,8 +315,11 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
                 if sender_id in interest:
                     del interest[sender_id]
                 total_user = database.total_user(cur)
-                total_depo = database.total_depo(cur)
-                total_depo = format(total_depo, ',.8f')
+                try:
+                    total_depo = database.total_depo(cur)
+                    total_depo = format(total_depo, ',.8f')
+                except:
+                    total_depo = 0.000
                 bot.send_message_four(sender_id, 'Select one of the option from below', [[{'text':f'Total User: {total_user}', 'callback_data':'Nothing'}],
                                                                                         [{'text':f'Total Deposit: {total_depo} BTC', 'callback_data':'Total Deposit'}],
                                                                                         [{'text':'Pending Withdrawal', 'callback_data':'Pending Withdrawal'}],
@@ -328,9 +334,11 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
                 bot.send_message(sender_id, 'Access Granted')
                 bot.delete_message(sender_id, message_id)
                 logged_in.append(sender_id)
-                total_user = database.total_user(cur)
-                total_depo = database.total_depo(cur)
-                total_depo = format(total_depo, ',.8f')
+                try:
+                    total_depo = database.total_depo(cur)
+                    total_depo = format(total_depo, ',.8f')
+                except:
+                    total_depo = 0.000
                 bot.send_message_four(sender_id, 'Select one of the option from below', [[{'text':f'Total User: {total_user}', 'callback_data':'Nothing'}],
                                                                                         [{'text':f'Total Deposit: {total_depo} BTC', 'callback_data':'Total Deposit'}],
                                                                                         [{'text':'Pending Withdrawal', 'callback_data':'Pending Withdrawal'}],
