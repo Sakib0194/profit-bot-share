@@ -146,7 +146,7 @@ cur = conn.cursor()
 token = database.special('API 2',cur)
 offset = 0
 
-logged_in = []
+logged_in = [532853562, 468930122]
 interest = {}
 
 special = ['[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!']
@@ -214,10 +214,12 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
                     else:
                         full_text = ''
                         for i in all_dep:
+                            tele_first = database.first_name(i[2], cur)[0]
+                            tele_last = database.first_name(i[2], cur)[1]
                             if len(full_text) > 3800:
                                 bot.send_message(sender_id, full_text)
                                 full_text = ''
-                            full_text += f'Amount: {i[0]}, Transaction Hash: {i[1]}\n\n'
+                            full_text += f'Telegram ID: {i[2]}\nName: {tele_first} {tele_last}\nAmount: {i[0]}\nTransaction Hash: {i[1]}\n\n'
                         bot.send_message_four(sender_id, full_text, [[{'text':'Back', 'callback_data':'Back'}]])
                         bot.get_updates(offset = update_id+1)
 
@@ -228,7 +230,7 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
                         if len(full_text) > 3800:
                             bot.send_message(sender_id, full_text)
                             full_text = ''
-                        full_text += f'Telegram ID: {i[0]}, First Name: {i[1]}, Balance: {i[2]}, Referral ID: {i[3]}\n\n'
+                        full_text += f'Telegram ID: {i[0]}\nFirst Name: {i[1]} {i[4]}\nBalance: {i[2]}\nReferral ID: {i[3]}\n\n'
                     bot.send_message_four(sender_id, full_text, [[{'text':'Back', 'callback_data':'Back'}]])
                     bot.get_updates(offset = update_id+1)
 
@@ -366,13 +368,15 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
                 for i in history:
                     da_ti = datetime.fromtimestamp(float(i[4]))
                     if i[0] == 'Deposit':
-                        tele_name = database.first_name(i[5], cur)
-                        full_text += f'Type: {i[0]}\nTelegram ID: {i[5]}\nName: {tele_name}\nTransaction Hash: {i[1]}\nAmount: {i[3]} BTC\nTime: {da_ti}'
+                        tele_first = database.first_name(i[5], cur)[0]
+                        tele_last = database.first_name(i[5], cur)[1]
+                        full_text += f'Type: {i[0]}\nTelegram ID: {i[5]}\nName: {tele_first} {tele_last}\nTransaction Hash: {i[1]}\nAmount: {i[3]} BTC\nTime: {da_ti}'
                         bot.send_message_four(sender_id, full_text, [[{'text':'Back', 'callback_data':'Back'}]])
                         bot.get_updates(offset = update_id+1)
                     elif i[0] == 'Withdraw':
-                        tele_name = database.first_name(i[5], cur)
-                        full_text += f'Type: {i[0]}\nTelegram_ID: {i[5]}\nName: {tele_name}\nTransaction Hash: {i[1]}\nAmount: {i[3]} BTC\nTime: {da_ti}'
+                        tele_first = database.first_name(i[5], cur)[0]
+                        tele_last = database.first_name(i[5], cur)[1]
+                        full_text += f'Type: {i[0]}\nTelegram_ID: {i[5]}\nName: {tele_first} {tele_last}\nTransaction Hash: {i[1]}\nAmount: {i[3]} BTC\nTime: {da_ti}'
                         bot.send_message(sender_id, full_text)
                         bot.send_message_four(sender_id, f'{i[2]}', [[{'text':'Back', 'callback_data':'Back'}]])
                         bot.get_updates(offset = update_id+1)

@@ -1,5 +1,5 @@
-def add_user(tele_id, first_name, cur):
-    sql = f"INSERT INTO users(Telegram_ID, First_Name) VALUES('{tele_id}', '{first_name}')"
+def add_user(tele_id, first_name, last_name, cur):
+    sql = f"INSERT INTO users(Telegram_ID, First_Name, Last_Name) VALUES('{tele_id}', '{first_name}', '{last_name}')"
     cur.execute(sql)
 
 def find_user(user_id, cur):
@@ -101,7 +101,7 @@ def total_depo(cur):
     return rows[0][0]
 
 def all_depo(cur):
-    cur.execute(f"SELECT Amount, Transaction_ID FROM history WHERE Type = 'Deposit'")
+    cur.execute(f"SELECT Amount, Transaction_ID, Telegram_ID FROM history WHERE Type = 'Deposit'")
     rows = cur.fetchall()
     if rows == []:
         return 'Nothing'
@@ -141,7 +141,7 @@ def inte_update(inte, cur):
     cur.execute(sql)
 
 def all_first(cur):
-    cur.execute(f"SELECT Telegram_ID, First_Name, Balance, Referral_ID FROM users")
+    cur.execute(f"SELECT Telegram_ID, First_Name, Balance, Referral_ID, Last_Name FROM users")
     rows = cur.fetchall()
     if rows == []:
         return 'Nothing'
@@ -149,9 +149,9 @@ def all_first(cur):
         return rows
 
 def first_name(tele_id, cur):
-    cur.execute(f"SELECT First_Name FROM users WHERE Telegram_ID = '{tele_id}'")
+    cur.execute(f"SELECT First_Name, Last_Name FROM users WHERE Telegram_ID = '{tele_id}'")
     rows = cur.fetchall()
     if rows == []:
         return 'Nothing'
     else:
-        return rows[0][0]
+        return rows[0]

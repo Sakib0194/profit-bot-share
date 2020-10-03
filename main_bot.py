@@ -267,7 +267,7 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
                             bot.send_message(sender_id, full_text)
                             full_text = ''
                         da_ti = datetime.fromtimestamp(float(i[3]))
-                        full_text += f'Transaction Hash: {i[0]}, Amount: {i[2]} BTC, Time: {da_ti}\n\n'
+                        full_text += f'Transaction Hash: {i[0]}\nAmount: {i[2]} BTC\nTime: {da_ti}\n\n'
                 if with_his == 'Nothing':
                     full_text += 'Withdraw History\n\nNothing'
                 else:
@@ -277,7 +277,7 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
                             bot.send_message(sender_id, full_text)
                             full_text = ''
                         da_ti = datetime.fromtimestamp(float(i[3]))
-                        full_text += f'Transaction Hash: {i[0]}, Wallet: {i[1]}, Amount: {i[2]} BTC, Time: {da_ti}\n\n'
+                        full_text += f'Transaction Hash: {i[0]}\nWallet: {i[1]}\nAmount: {i[2]} BTC\nTime: {da_ti}\n\n'
                 bot.send_message_four(sender_id, full_text, [[{'text':'Back', 'callback_data':'Back'}]])
                 bot.get_updates(offset = update_id+1)
 
@@ -287,12 +287,16 @@ def bot_message_handler(current_updates, update_id, message_id, sender_id, group
             print(text)
 
             if text.startswith('/start'):
+                try:
+                    last_name = current_updates['message']['from']['last_name']
+                except:
+                    last_name = ''
                 if sender_id in with_amount:
                     with_amount.remove(sender_id)
                 if sender_id in change_address:
                     change_address.remove(sender_id)
                 if database.find_user(sender_id, cur) == 'Nothing':
-                    database.add_user(sender_id, first_name, cur)
+                    database.add_user(sender_id, first_name, last_name, cur)
                 if database.find_ref(sender_id, cur) == 0:
                     try:
                         data = text.split(' ')[1]
